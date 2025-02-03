@@ -279,23 +279,6 @@
         .download-options a:hover {
             background-color: #2e0079;
         }
-        .donations-section {
-            background-color: #1c1c3a;
-            padding: 50px 20px;
-            text-align: center;
-            margin-top: 50px;
-            border-radius: 15px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
-        }
-        .donations-section h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #ffffff;
-        }
-        .donations-section p {
-            font-size: 1.2rem;
-            color: #e0e0e0;
-        }
         footer {
             padding: 20px;
             background: linear-gradient(to bottom, #0b081c, #1a0933);
@@ -332,14 +315,13 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
+             backdrop-filter: blur(8px);
         }
         .popup-backdrop.show {
             opacity: 1;
             pointer-events: auto;
         }
-        .popup-backdrop {
-           backdrop-filter: blur(8px);
-        }
+
         .popup-content {
             background-color: var(--dark);
             border-radius: 15px;
@@ -349,22 +331,34 @@
             width: 80%;
             max-width: 600px;
             position: relative;
-            transform: translateY(-20px);
+             transform: translateY(-20px);
             opacity: 0;
             transition: transform 0.3s ease, opacity 0.3s ease;
+             overflow-y: auto;
+             max-height: 90vh;
         }
         .popup-backdrop.show .popup-content {
-            transform: translateY(0);
-            opacity: 1;
+           transform: translateY(0);
+           opacity: 1;
         }
         .popup-content h3 {
             color: #ffffff;
             margin-bottom: 15px;
         }
-        .popup-content p {
+       .popup-content p {
             color: #e0e0e0;
             margin-bottom: 20px;
             line-height: 1.5;
+              white-space: pre-line;
+            text-align: left;
+        }
+        .popup-content .popup-content-keyword {
+            color: #6a5acd; 
+            font-weight: bold;
+        }
+        .popup-content .popup-content-important {
+            color: #ff4d4d;
+            font-weight: bold;
         }
         .popup-close-button {
             position: absolute;
@@ -442,7 +436,7 @@
                 behavior: 'smooth'
             });
         }
-        function openNotes(event, title, content) {
+       function openNotes(event, title, content) {
             event.preventDefault();
 
             const popupBackdrop = document.createElement('div');
@@ -454,9 +448,21 @@
             titleElement.textContent = title;
             popupContent.appendChild(titleElement);
 
-            const contentElement = document.createElement('p');
-            contentElement.textContent = content;
-            popupContent.appendChild(contentElement);
+            const formattedContent = content.split('\n').map(line => {
+             let modifiedLine = line;
+                if (line.includes("Flash vbmeta:")) {
+                    modifiedLine = line.replace("Flash vbmeta:", `<span class="popup-content-keyword">Flash vbmeta:</span>`);
+                } else if (line.includes("Flash Recovery:")) {
+                    modifiedLine = line.replace("Flash Recovery:", `<span class="popup-content-keyword">Flash Recovery:</span>`);
+                }else if(line.includes("Reboot to Download Mode:")) {
+                   modifiedLine = line.replace("Reboot to Download Mode:", `<span class="popup-content-keyword">Reboot to Download Mode:</span>`);
+                }else if (line.startsWith("Important Note:")) {
+                    modifiedLine = `<span class="popup-content-important">${line}</span>`;
+                }
+            return `<p>${modifiedLine}</p>`;
+        }).join('');
+
+            popupContent.innerHTML += formattedContent;
 
             const closeButton = document.createElement('button');
             closeButton.classList.add('popup-close-button');
@@ -518,6 +524,18 @@
             <div class="download-options">
             <a href="https://www.mediafire.com/file/lwiza3nj0r08a74/recovery.img/file">Image File</a>
                 <a href="https://www.mediafire.com/file/qdc525v4eaxg7jp/TWRP_3.7.1.tar/file">Tar For Odin ( For AP Slot )</a>
+                <a href="https://github.com/ZORO2045/SM-T505N-Custom-ROMs/releases/download/N%2FA/vbmeta.img.tar">vbmeta.img.tar</a>
+                <a href="#" onclick="openNotes(event, 'Installation Guide', `To install the custom recovery, please follow these steps:
+
+1.  Flash vbmeta: Use Odin to flash the provided \`vbmeta.img.tar\` file in the AP slot. This step is essential to disable Android Verified Boot (AVB) and prevent boot issues.
+
+2.  Reboot to Download Mode: After flashing vbmeta, reboot your device into Download Mode again.
+
+3.  Flash Recovery: Use Odin to flash the custom recovery image file (e.g., TWRP) in the AP slot.
+
+    
+Important Note: If you accidentally flash the recovery directly without flashing \`vbmeta.img.tar\` first, your device might not boot correctly. In this case, you will need to re-flash the stock ROM to restore your device to its original state.
+`); return false;">Installation Guide</a>
             </div>
         </div>
         <div class="rom-card">
@@ -527,6 +545,18 @@
             <a href="#" onclick="toggleDownloadOptions(event); return false;">Download Options</a>
             <div class="download-options">
                 <a href="https://drive.google.com/file/d/1cmM07J7W_18z6v4oFYjy6D5moQ_H0Lv9/view">Download Recovery</a>
+                <a href="https://github.com/ZORO2045/SM-T505N-Custom-ROMs/releases/download/N%2FA/vbmeta.img.tar">vbmeta.img.tar</a>
+                <a href="#" onclick="openNotes(event, 'Installation Guide', `To install the custom recovery, please follow these steps:
+
+1.  Flash vbmeta: Use Odin to flash the provided \`vbmeta.img.tar\` file in the AP slot. This step is essential to disable Android Verified Boot (AVB) and prevent boot issues.
+
+2.  Reboot to Download Mode: After flashing vbmeta, reboot your device into Download Mode again.
+
+3.  Flash Recovery: Use Odin to flash the custom recovery image file (e.g., TWRP) in the AP slot.
+
+    
+Important Note: If you accidentally flash the recovery directly without flashing \`vbmeta.img.tar\` first, your device might not boot correctly. In this case, you will need to re-flash the stock ROM to restore your device to its original state.
+`); return false;">Installation Guide</a>
         </div>
     </div>
 </section>
@@ -535,4 +565,4 @@
 </footer>
 
 </body>
-  </html>
+    </html>
