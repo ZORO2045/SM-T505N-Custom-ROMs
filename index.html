@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SM-T505 Custom ROMs - gta4l</title>
+    <link rel="icon" type="image/png" href="images/logo.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.3/particles.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #8b81fa;
+            --secondary-color: #4a148c;
+            --hover-color: rgba(255, 255, 255, 0.07);
+            --background-gradient-start: #0b081c;
+            --background-gradient-end: #1a0933;
+            --card-gradient: linear-gradient(to bottom right, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+            --text-shadow-light: 1px 1px 5px rgba(0, 0, 0, 0.4);
+            --text-shadow-dark: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            --button-gradient-color-1: #4a148c;
+            --button-gradient-color-2: #2c3e50;
+            --button-hover-color-1: #6c5ce7;
+            --button-hover-color-2: #3498db;
+            --primary: #6c5ce7;
+            --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            --transition: all 0.3s ease;
+
+            --card-background: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --card-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            color: #e0e0e0;
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease;
+            cursor: none;
+        }
+
+        .body-no-scroll {
+            overflow-y: hidden;
+        }
+
+        header {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: transparent;
+            background: linear-gradient(to bottom right, #000000, #1b004d);
+            text-align: center;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        header .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        header h1,
+        header p,
+        header a {
+            user-select: none;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.6);
+            animation: fadeInDown 1s ease forwards;
+        }
+        
+        header h1:hover {
+            color: #f3baff;
+        }
+
+
+        header p {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease forwards;
+        }
+        
+        header p:hover {
+            color: #f3baff;
+        }
+
+
+        header a {
+            padding: 15px 30px;
+            background: linear-gradient(to right, var(--button-gradient-color-1), var(--button-gradient-color-2));
+            color: #ffffff;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin: 0 5px;
+            animation: fadeIn 1s ease forwards;
+            cursor: none;
+        }
+        
+        header a:hover {
+            background: linear-gradient(to right, var(--button-hover-color-1), var(--button-hover-color-2));
+            transform: scale(1.05);            
+        }
+
+        header a::before {
+
+            background: linear-gradient(120deg, transparent, rgba(139, 129, 250, 0.4), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.4s ease;
+            z-index: 1;
+        }
+
+        header a:hover::before {
+            transform: translateX(0);
+        }
+
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translateX(-100%);
+            width: 300px;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(31, 16, 34, 0.8), rgba(15, 0, 70, 0.8));
+            backdrop-filter: blur(10px);
+            padding: 35px;
+            border-radius: 0px;
+            transition: transform 0.25s ease;
+            z-index: 999;
+            overflow-y: auto;
+            visibility: hidden;
+            opacity: 0;
+            scrollbar-color: #D8BFD8 rgba(0, 0, 0, 0.1);
+            scrollbar-width: thin;
+        }
+
+        .sidebar.open {
+            transform: translateX(0);
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 20px;
+            color: #ffffff;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            user-select: none;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .sidebar h2:hover {
+            color: #f3baff;
+        }
+
+        .sidebar h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, #ff5f6d, #ffc371, #48c6ef, #6a11cb, #ff7eb3);
+            z-index: 1;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            color: #e0e0e0;
+            text-decoration: none;
+            padding: 14px 0;
+            transition: color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar a:hover {
+            color: #ffffff;
+            background-color: var(--hover-color);
+        }
+
+        .sidebar a i {
+            margin-right: 20px;
+            font-size: 1.3rem;
+            width: 25px;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .sidebar a:hover i {
+            transform: scale(1.1);
+        }
+
+        .sidebar a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.2s ease;
+        }
+
+        .sidebar a:hover::before {
+            transform: scaleX(1);
+        }
+
+        .sidebar a:nth-child(2) i {
+            color: #fdd835;
+        }
+
+        .sidebar a:nth-child(3) i {
+            color: #00bcd4;
+        }
+
+        .sidebar a:nth-child(4) i {
+            color: #32CD32;
+        }
+        
+        .sidebar a:nth-child(5) i {
+            color: #000fff;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            color: #fff;
+            cursor: none;
+            z-index: 1000;
+            transition: color 0.2s ease;
+        }
+
+        .toggle-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .roms-section {
+            background: linear-gradient(135deg, #060019, #1e0338, #3e064f, #5f0970);
+            box-shadow: 0 0 20px rgba(163, 27, 197, 0.5);
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .roms-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #8b81fa;
+            user-select: none;
+        }
+
+        .rom-cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .android-card {
+            background: var(--card-gradient);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 300px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            user-select: none;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .android-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .android-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .android-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .android-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .android-card img {
+            width: 100px;
+            margin-bottom: 15px;
+        }
+
+        .android-card h3 {
+            color: #ffffff;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            user-select: none;
+        }
+
+        .android-card button {
+            padding: 10px 20px;
+            background: linear-gradient(to right, var(--button-gradient-color-1), var(--button-gradient-color-2));
+            color: #ffffff;
+            border-radius: 25px;
+            font-weight: 800;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            border: none;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .android-card button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(139, 129, 250, 0.4), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.4s ease;
+            z-index: 1;
+        }
+
+        .android-card button:hover::before {
+            transform: translateX(0);
+        }
+
+        .android-card button:hover {
+            background: linear-gradient(to right, var(--button-hover-color-1), var(--button-hover-color-2));
+            transform: scale(1.05);
+        }
+
+        footer {
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #000000, #2a004f);
+            text-align: center;
+            margin-top: 50px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
+            user-select: none;
+            border: 2px solid #6a5acd;
+        }
+
+        footer a {
+            color: #d18aff;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s ease-in-out;
+        }
+
+        footer a:hover {
+            color: #f3baff;
+        }
+
+        .footer__copy {
+            display: block;
+            color: #c7a4ff;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            user-select: none;
+            letter-spacing: 0.5px;
+            opacity: 0.85;
+        }
+
+        .social-icons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .social-icons a {
+            color: #d18aff;
+            font-size: 2rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #f3baff;
+            transform: scale(1.2);
+        }
+
+        .donations-section {
+            text-align: center;
+            padding: 60px 30px;
+            margin-top: 80px;
+            background: none;
+            color: #f0f0f0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            max-width: 800px;
+        }
+
+        .donations-section h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        }
+        
+        .donations-section h2:hover {
+            color: #f3baff;
+        }
+
+        .donations-section p {
+            font-size: 1.3rem;
+            color: #d0d0d0;
+            margin-bottom: 35px;
+            line-height: 1.7;
+        }
+
+        .donations-section .support-paragraph {
+            font-size: 1.3rem;
+            color: #d0d0d0;
+            margin-bottom: 35px;
+            line-height: 1.7;
+        }
+
+        .donations-section .support-paragraph a {
+            color: #d18aff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .donations-section .support-paragraph a:hover {
+            color: #f3baff;
+        }
+
+        .donation-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 30px;
+            margin: 15px;
+            border: none;
+            border-radius: 35px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            text-decoration: none;
+            color: #fff;
+            letter-spacing: 0.5px;
+            cursor: none;
+        }
+
+        .donation-button i {
+            margin-right: 12px;
+            font-size: 1.4rem;
+        }
+
+        .donation-button.telegram {
+            background: linear-gradient(to right, #29ABE2, #1479C1);
+        }
+
+        .donation-button.telegram:hover {
+            background: linear-gradient(to right, #1479C1, #29ABE2);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .donation-button.chat {
+            background: linear-gradient(to right, #2ECC71, #1A9B60);
+        }
+
+        .donation-button.chat:hover {
+            background: linear-gradient(to right, #1A9B60, #2ECC71);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .donation-button.youtube {
+            background: linear-gradient(to right, #FF0000, #C4032B);
+        }
+
+        .donation-button.youtube:hover {
+            background: linear-gradient(to right, #C4032B, #FF0000);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .donation-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5rem;
+            }
+
+            header p {
+                font-size: 1.2rem;
+            }
+
+            .rom-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .donations-section {
+                padding: 40px 20px;
+                margin-bottom: 25px auto;
+            }
+
+            .donations-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .donations-section .support-paragraph,
+            .donations-section p {
+                font-size: 1.1rem;
+                line-height: 1.5;
+            }
+
+            .donation-button {
+                font-size: 1rem;
+                padding: 12px 25px;
+                margin: 10px;
+            }
+
+            .donation-button i {
+                font-size: 1.2rem;
+            }
+
+            .social-icons a {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+    <script>
+        function smoothScroll(target) {
+            document.querySelector(target).scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+        let animationFrame = null;
+        let isSidebarOpen = false;
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const toggleBtn = document.querySelector('.toggle-btn i');
+            const body = document.querySelector('body');
+
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+            }
+            const startTransform = isSidebarOpen ? 0 : -100;
+            const endTransform = isSidebarOpen ? -100 : 0;
+
+            let startTime = null;
+            const animate = (time) => {
+                if (!startTime) startTime = time;
+                const progress = Math.min((time - startTime) / 50, 1);
+                const transformValue = startTransform + (endTransform - startTransform) * progress;
+                sidebar.style.transform = `translateX(${transformValue}%)`;
+
+                if (progress < 1) {
+                    animationFrame = requestAnimationFrame(animate);
+                }
+                else {
+                    sidebar.style.visibility = endTransform === 0 ? "visible" : "hidden";
+                    sidebar.style.opacity = endTransform === 0 ? 1 : 0;
+                    animationFrame = null;
+                }
+            };
+
+            if (!isSidebarOpen) {
+                sidebar.style.visibility = "visible";
+                sidebar.style.opacity = 1;
+            }
+
+
+            animationFrame = requestAnimationFrame(animate);
+
+            isSidebarOpen = !isSidebarOpen;
+
+
+            if (isSidebarOpen) {
+                toggleBtn.classList.remove('fa-bars');
+                toggleBtn.classList.add('fa-times');
+                body.classList.add('body-no-scroll');
+
+            } else {
+                toggleBtn.classList.remove('fa-times');
+                toggleBtn.classList.add('fa-bars');
+                body.classList.remove('body-no-scroll');
+
+            }
+        }
+
+        function closeSidebar(event) {
+            const sidebar = document.querySelector('.sidebar');
+            const toggleBtn = document.querySelector('.toggle-btn');
+
+            if (isSidebarOpen &&
+                !sidebar.contains(event.target) &&
+                !toggleBtn.contains(event.target)) {
+                toggleSidebar();
+            }
+        }
+
+        function handleScroll() {
+            if (isSidebarOpen) {
+                toggleSidebar();
+            }
+        }
+
+        window.addEventListener('load', function () {
+
+            Particles.init({
+                selector: "header .background",
+                color: ["#FF0099", "#00FFFF"],
+                connectParticles: true,
+                responsive: [
+                    {
+                        breakpoint: 765,
+                        options: {
+                            color: ["#FF0000", "#FF0099", "#00FFFF"],
+                            maxParticles: 90,
+                            connectParticles: false,
+                        },
+                    },
+                ],
+            });
+        });
+
+
+        document.addEventListener('click', closeSidebar);
+        document.addEventListener('scroll', handleScroll);
+    </script>
+</head>
+
+<body>
+    <header>
+        <canvas class="background"></canvas>
+        <span class="toggle-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></span>
+        <div class="sidebar">
+            <h2>Quick Links</h2>
+            <a href="https://developer.samsung.com/android-usb-driver"><i class="fas fa-plug"></i> USB Drivers</a>
+            <a href="https://odindownload.com/mobile/"><i class="fas fa-download"></i> Odin3</a>
+            <a href="https://samfw.com/firmware/SM-T505N/EGY/T505NDXS7CXG1"><i class="fas fa-file-alt"></i> Firmware</a>
+            <a href="custom_recovery/index.html"><i class="fas fa-hdd"></i> Custom Recoveries</a>
+        </div>
+        <h1>Custom ROMs for Samsung Galaxy Tab A 10.4 2020</h1>
+        <p>Unlock amazing performance with custom ROMs for your device! 🚀</p>
+        <div>
+            <a href="javascript:void(0);" class="btn" onclick="smoothScroll('#roms')">Let’s go!</a>
+            <a href="javascript:void(0)" onclick="smoothScroll('.donations-section')">Support</a>
+        </div>
+    </header>
+    <section id="roms" class="roms-section">
+        <h2>Android Versions</h2>
+        <div class="rom-cards">
+            <div class="android-card">
+                <img src="https://i.ibb.co/dbRcgXf/13.png" alt="Android 13">
+                <h3>Android 13 T</h3>
+                <button onclick="window.location.href='android/13.html'" style="font-size: 18px;">View
+                    Available ROMs</button>
+            </div>
+            <div class="android-card">
+                <img src="https://i.ibb.co/StgJGxy/14.png" alt="Android 14">
+                <h3>Android 14 U</h3>
+                <button onclick="window.location.href='android/14.html'" style="font-size: 18px;">View
+                    Available ROMs</button>
+            </div>
+            <div class="android-card">
+                <img src="https://i.ibb.co/1fZRmwyD/android15.png" alt="Android 15">
+                <h3>Android 15 V</h3>
+                <button onclick="window.location.href='android/15.html'" style="font-size: 18px;">View
+                    Available ROMs</button>
+            </div>
+        </div>
+
+        <section class="donations-section">
+            <h2>Support the ROM Development</h2>
+            <p>If you appreciate the hard work and dedication that goes into creating these custom ROMs, please consider
+                showing your support.</p>
+            <p class="support-paragraph">
+                For donations or inquiries, you can directly contact <a href="https://t.me/SeifHecker2099">@SeifHecker2099</a> on Telegram.
+            </p>
+            <div style="margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
+                <a href="https://t.me/gta4ljt" class="donation-button telegram">
+                    <i class="fab fa-telegram"></i> Telegram Channel
+                </a>
+                <a href="https://t.me/smt505n" class="donation-button chat">
+                    <i class="fas fa-comments"></i> Chat Group
+                </a>
+                <a href="https://youtube.com/@seifel-deinhossam6690?feature=shared" class="donation-button youtube">
+                    <i class="fab fa-youtube"></i> YouTube Channel
+                </a>
+            </div>
+            <footer>
+                <p>Developed by <a href="https://zoro2045.github.io/">ፚ Ꭷ Ꮢ Ꭷ ❥</a></p>
+                <div class="social-icons">
+                    <a href="https://twitter.com/DEV_ZORO2045" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://t.me/ZORO2045" target="_blank"><i class="fab fa-telegram"></i></a>
+                    <a href="https://github.com/ZORO2045" target="_blank"><i class="fab fa-github"></i></a>
+                </div>
+                <span class="footer__copy">
+                    © 2025 All rights reserved.
+                </span>
+            </footer>
+</body>
+
+</html>
